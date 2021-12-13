@@ -21,13 +21,14 @@
     <link rel="stylesheet" href="{{asset('frontEnd/css/flaticon.css')}}">
     <link rel="stylesheet" href="{{asset('frontEnd/css/icomon.css')}}">
     <link rel="stylesheet" href="{{asset('frontEnd/css/style.css')}}">
+    <link rel="icon" href="https://drive.google.com/thumbnail?id=1w1uXmC0H-T7benFKX3W44HRAYyuOh-Pt">
     
   </head>
   <body class="goto-here">
   
     @include('frontEnd.layouts.header')
     @yield('content')
-    @include('frontEnd.layouts.footer')
+    <!-- @include('frontEnd.layouts.footer') -->
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 

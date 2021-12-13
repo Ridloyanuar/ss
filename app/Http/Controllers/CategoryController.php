@@ -39,7 +39,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function checkCateName(Request $request){
+    public function checkCateName(Request $request) {
         $data=$request->all();
         $category_name=$data['name'];
         $ch_cate_name_atDB=Category_model::select('name')->where('name',$category_name)->first();
@@ -51,12 +51,18 @@ class CategoryController extends Controller
     }
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name'=>'required|max:255|unique:categories,name',
-            'url'=>'required',
+        $this->validate($request, [
+            'name' => 'required|max:255|unique:categories,name',
+            // 'url' => 'required',
         ]);
-        $data=$request->all();
-        Category_model::create($data);
+
+        $category = new Category_model();
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->url = (env('APP_ENV') == 'production') ? env('SS_URL') : env('LOCAL_SS_URL') . '/shop?category=' . strtolower($request->name);
+        $category->status = $request->status;
+        $category->save();
+
         return redirect()->route('category.index')->with('message','Added Success!');
     }
 

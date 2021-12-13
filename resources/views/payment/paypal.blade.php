@@ -56,12 +56,12 @@
 	            </div>
 			</div>
 			<div class="col-xl-5">
-	          <div class="row mt-5 pt-3">
+	          <div class="row">
 	          	<div class="col-md-12">
 	          		<div class="cart-detail p-3 p-md-4">
 	          			<h3 class="billing-heading mb-4">Hal-hal yang perlu diperhatikan: </h3>
                             <ul class="list-group">
-                                <li class="list-group-item">Pembayaran hanya ke rekening BCA <b>3210343218</b> a.n Sayur Sembalun.</li>
+                                <li class="list-group-item">Pembayaran hanya ke rekening {{$bankInformation->type}} <b>{{$bankInformation->number}}</b> a.n {{$bankInformation->name}}.</li>
                                 <li class="list-group-item">Sesuaikan nilai transfer yang tertera disini (<b>Rp{{$who_buying->grand_total}}</b>), jangan melebih-lebihkan atau membulatkan angka nominal.</li>
                                 <li class="list-group-item">Pastikan semua data terisi dengan benar.</li>
                                 <li class="list-group-item">Selesaikan pembayaran anda sebelum pukul 15:00:00 WITA. Pesanan akan otomatis dibatalkan jika melewati batas waktu pembayaran.</li>

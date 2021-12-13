@@ -31,7 +31,7 @@
                     @foreach($payments as $payment)
                         <tr class="gradeC">
                             <td style="vertical-align: middle;">{{$i}}</td>
-                            <td style="text-align: center; vertical-align: middle;">{{$payment->name}}</td>
+                            <td style="text-align: center; vertical-align: middle;">{{$payment->user->name}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$payment->order_id}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$payment->bank_name}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$payment->bank_user}}</td>
@@ -40,9 +40,9 @@
                                 <img src="{{url('payment/',$payment->file_transfer)}}" class="img-fluid" width="50" alt="Colorlib Template">
                             </a>
                             </td>
-                            <td style="text-align: center; vertical-align: middle;">{{$payment->grand_total}}</td>
+                            <td style="text-align: center; vertical-align: middle;">{{$payment->order->grand_total}}</td>
                             <td style="text-align: center; vertical-align: middle;">
-                                <a href="#myModal{{$payment->id}}" data-toggle="modal" class="btn btn-info btn-mini">View</a>
+                                <a href="#myModal{{$payment->order->id}}" data-toggle="modal" class="btn btn-info btn-mini">Confirm</a>
                                 <a href="{{route('payment.edit',$payment->id)}}" class="btn btn-primary btn-mini">Edit</a>
                                 <a href="javascript:" rel="{{$payment->id}}" rel1="delete-coupon" class="btn btn-danger btn-mini deleteRecord">Delete</a>
                             </td>

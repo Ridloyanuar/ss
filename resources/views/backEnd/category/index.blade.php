@@ -17,7 +17,6 @@
                     <thead>
                     <tr>
                         <th>Category Name</th>
-                        <th>Parent Category</th>
                         <th>Created At</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -30,11 +29,6 @@
                             ?>
                             <tr class="gradeC">
                                 <td>{{$category->name}}</td>
-                                <td>
-                                    @foreach($parent_cates as $parent_cate)
-                                        {{$parent_cate->name}}
-                                    @endforeach
-                                </td>
                                 <td style="text-align: center;">{{$category->created_at->diffForHumans()}}</td>
                                 <td style="text-align: center;">{{($category->status==0)?' Disabled':'Enable'}}</td>
                                 <td style="text-align: center;">

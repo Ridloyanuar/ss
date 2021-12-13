@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendEmail;
 use App\Orders_model;
 use App\PaymentConfirmation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -20,17 +22,28 @@ class PaymentController extends Controller
         $order->order_status = $request->order_status;
         $order->save();
 
+        //send email payment
+        $subject = "Pembayaran Sukses";
+        $data = [
+            'name' => $order->name,
+            'email' => $order->users_email,
+            // 'confirm' => (env('APP_ENV') == 'local') ? env('LOCAL_SS_URL') .'/bank?order=sayursmb-' . $order->id : env('SS_URL') .'/bank?order=sayursmb-' . $order->id
+        ];
+    
+        Mail::send(new SendEmail($data['email'], $subject, 'mailer.paymentconfirmation', $data));
+
         return redirect()->back();
     }
 
     public function index()
     {
         $menu_active = 6;
-        $payments = DB::table('payment_confirmation')
-                            ->join('users', 'payment_confirmation.user_id', '=', 'users.id')
-                            ->join('orders', 'payment_confirmation.order_id', '=', 'orders.id')
-                            ->where('order_status', 'confirm_payment')
-                            ->get();
+        $payments = PaymentConfirmation::with(['user', 'order'])
+                                        ->whereHas('order', function($q) {
+                                            $q->where('order_status', 'confirm_payment');
+                                        })
+                                        ->orderBy('id', 'desc')
+                                        ->get();                    
 
         return view('backEnd.payment.index',compact('menu_active', 'payments'));
     }

@@ -1,5 +1,5 @@
 @extends('backEnd.layouts.master')
-@section('title','Add Products Page')
+@section('title','Edit Products Page')
 @section('content')
     <div id="breadcrumb"> <a href="{{url('/admin')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="{{route('product.index')}}">Products</a> <a href="#" class="current">Edit Product</a> </div>
     <div class="container-fluid">
@@ -10,7 +10,7 @@
         @endif
         <div class="widget-box">
             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                <h5>Add New Products</h5>
+                <h5>Edit Product</h5>
             </div>
             <div class="widget-content nopadding">
                 <form action="{{route('product.update',$edit_product->id)}}" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -51,13 +51,6 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="p_color" class="control-label">Color</label>
-                        <div class="controls{{$errors->has('p_color')?' has-error':''}}">
-                            <input type="text" name="p_color" id="p_color" value="{{$edit_product->p_color}}" required="required" style="width: 400px;">
-                            <span class="text-danger">{{$errors->first('p_color')}}</span>
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label for="description" class="control-label">Description</label>
                         <div class="controls{{$errors->has('description')?' has-error':''}}">
                             <textarea class="textarea_editor span12" name="description" id="description" rows="6" placeholder="Product Description" style="width: 580px;">{{$edit_product->description}}</textarea>
@@ -67,10 +60,50 @@
                     <div class="control-group">
                         <label for="price" class="control-label">Price</label>
                         <div class="controls{{$errors->has('price')?' has-error':''}}">
-                            <div class="input-prepend"> <span class="add-on">$</span>
+                            <div class="input-prepend"> <span class="add-on">Rp</span>
                                 <input type="number" name="price" id="price" class="" value="{{$edit_product->price}}" title="" required="required">
                                 <span class="text-danger">{{$errors->first('price')}}</span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                    <label class="control-label">Satuan</label>
+                        <div class="controls">
+                            <select name="satuan" style="width: 415px;">
+                            <option value="{{$edit_product->satuan}}">{{$edit_product->satuan}}</option>
+                            <option value="kg">kg</option>
+                            <option value="ons">ons</option>
+                            <option value="pcs">pcs</option>
+                            <option value="gram">gram</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="stock" class="control-label">Stock</label>
+                        <div class="controls{{$errors->has('stock')?' has-error':''}}">
+                            <input type="number" name="stock" id="stock" class="" value="{{$edit_product->stock}}" required="required">
+                            <span class="text-danger">{{$errors->first('stock')}}</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                    <label class="control-label">Promo</label>
+                        <div class="controls">
+                            <select name="promo" style="width: 415px;">
+                            <option value="{{$edit_product->promo}}">{{$edit_product->promo * 100}}%</option>
+                            <option value="0">0%</option>
+                            <option value="0.01">1%</option>
+                            <option value="0.05">5%</option>
+                            <option value="0.1">10%</option>
+                            <option value="0.2">20%</option>
+                            <option value="0.3">30%</option>
+                            <option value="0.4">40%</option>
+                            <option value="0.5">50%</option>
+                            <option value="0.6">60%</option>
+                            <option value="0.7">70%</option>
+                            <option value="0.8">80%</option>
+                            <option value="0.9">90%</option>
+                            <option value="1">100%</option>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">

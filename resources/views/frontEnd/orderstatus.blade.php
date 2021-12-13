@@ -21,24 +21,24 @@
         <div class="col-md-12 ftco-animate">
         <h2>Status Pesananmu</h2>
         <ol class="list-group list-group-numbered">
-        @foreach($orders as $order)
-        <li class="list-group-item">
+        @foreach($orders as $orderr)
+        <li class="list-group-item" style="margin: 20px;">
             <div class="ms-2 me-auto">
-            <div class="fw-bold">Nomor Pemesanan: <b>sayursmb-{{$order->id}}</b></div>
-            <div class="fw-bold">Total Pembelian: <b>Rp{{number_format($order->grand_total)}}</b></div>
-            <div class="fw-bold">Tanggal Pembelian: <b>{{date('d/m/Y', strtotime($order->created_at))}}</b></div>
+            <div class="fw-bold">Nomor Pemesanan: <b>sayursmb-{{$orderr->id}}</b></div>
+            <div class="fw-bold">Total Pembelian: <b>Rp{{number_format($orderr->grand_total)}}</b></div>
+            <div class="fw-bold">Tanggal Pembelian: <b>{{date('d/m/Y', strtotime($orderr->created_at))}}</b></div>
             <p>Pesanan: </p>
-            @foreach($order['detail'] as $detail)
-            <div class="fw-bold">{{$detail->product_name}} (x{{$detail->quantity}})</div>
+            @foreach($orderr['detail'] as $detail)
+            <div class="fw-bold">- {{$detail->product_name}} (x{{$detail->quantity}})</div>
             @endforeach
             <div class="progress" style="margin-top: 10px;">
-                @if ($order->order_status == 'pending')
+                @if ($orderr->order_status == 'pending')
                 <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Menunggu Pembayaran</div>
-                @elseif ($order->order_status == 'payment')
+                @elseif ($orderr->order_status == 'payment')
                 <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Proses Pembayaran</div>
-                @elseif ($order->order_status == 'confirm_payment')
+                @elseif ($orderr->order_status == 'confirm_payment')
                 <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Konfirmasi Pembayaran</div>
-                @elseif ($order->order_status == 'payment_success') 
+                @elseif ($orderr->order_status == 'payment_success') 
                 <div class="progress-bar" role="progressbar" style="width: 80%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Pembayaran berhasil</div>
                 @else
                 <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Selesai</div>

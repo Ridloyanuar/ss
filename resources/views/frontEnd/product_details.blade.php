@@ -32,7 +32,7 @@
                 <input type="hidden" name="product_color" value="{{$detail_product->p_color}}">
                 <input type="hidden" name="price" value="{{$detail_product->price}}" id="dynamicPriceInput">
     				<h3>{{$detail_product->p_name}}</h3>
-    				<p class="price"><span>Rp. {{$detail_product->price}}/kg</span></p>
+    				<p class="price"><span>Rp. {{$detail_product->price}}/{{$detail_product->jenis_satuan}}</span></p>
     				<p>{{$detail_product->description}}</p>
 						<div class="row mt-4">
 							<div class="col-md-6">
@@ -47,10 +47,14 @@
 	          	</div>
 	          	<div class="w-100"></div>
 	          	<div class="col-md-12">
-	          		<p style="color: #000;">Masih Tersedia {{$totalStock}}kg</p>
+                @if ($detail_product->stock < 1)
+                <p style="color: #f00b0b;">STOK HABIS</p>
+                @else
+                <p style="color: #000;">Masih Tersedia {{$detail_product->stock}}kg</p>
+                @endif
 	          	</div>
               </div>
-              @if ($totalStock > 0)
+              @if ($detail_product->stock > 0)
               <button type="submit" class="btn btn-default cart" id="buttonAddToCart">Tambahkan Ke Keranjang</button>
               @endif
                 </div>

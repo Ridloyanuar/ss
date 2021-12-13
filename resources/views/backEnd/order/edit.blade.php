@@ -13,13 +13,13 @@
                 <h5>Add New Coupon</h5>
             </div>
             <div class="widget-content nopadding">
-                <form action="{{route('order.update',$edit_coupons->id)}}" method="post" class="form-horizontal">
+                <form action="{{route('order.update',$orders->id)}}" method="post" class="form-horizontal">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     {{method_field("PUT")}}
                     <div class="control-group">
                         <label for="coupon_code" class="control-label">Coupon Code</label>
                         <div class="controls{{$errors->has('coupon_code')?' has-error':''}}">
-                            <input type="text" name="coupon_code" id="coupon_code" class="form-control" value="{{$edit_coupons->coupon_code}}"
+                            <input type="text" name="coupon_code" id="coupon_code" class="form-control" value=""
                                    title="" required="required" minlength="5" maxlength="15" style="width: 400px;">
                             <span class="text-danger">{{$errors->first('coupon_code')}}</span>
                         </div>
@@ -27,7 +27,7 @@
                     <div class="control-group">
                         <label for="amount" class="control-label">Amount</label>
                         <div class="controls{{$errors->has('amount')?' has-error':''}}">
-                            <input type="number" min="0" name="amount" id="amount" class="form-control" value="{{$edit_coupons->amount}}" title="" required="required" style="width: 400px;">
+                            <input type="number" min="0" name="amount" id="amount" class="form-control" value="" title="" required="required" style="width: 400px;">
                             <span class="text-danger">{{$errors->first('amount')}}</span>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="controls{{$errors->has('expiry_date')?' has-error':''}}">
                             <div class="input-prepend">
                                 <div  data-date="12-02-2012" class="input-append date datepicker">
-                                    <input type="text" name="expiry_date" id="expiry_date" value="{{$edit_coupons->expiry_date}}"  data-date-format="yyyy-mm-dd" class="span11" style="width: 375px;" placeholder="yyyy-mm-dd">
+                                    <input type="text" name="expiry_date" id="expiry_date" value=""  data-date-format="yyyy-mm-dd" class="span11" style="width: 375px;" placeholder="yyyy-mm-dd">
                                     <span class="add-on"><i class="icon-th"></i></span>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                     <div class="control-group{{$errors->has('status')?' has-error':''}}">
                         <label class="control-label">Enable :</label>
                         <div class="controls">
-                            <input type="checkbox" name="status" id="status" value="1" {{$edit_coupons->status==1?'checked':''}}>
+                            <input type="checkbox" name="status" id="status" value="1" }>
                             <span class="text-danger">{{$errors->first('status')}}</span>
                         </div>
                     </div>

@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-sm-4 col-sm-offset-1">
                 <div class="login-form"><!--login form-->
-                    <h2>Login to your account</h2>
+                    <h4 style="text-align: center;">Masuk untuk Belanja!</h4>
                     <form action="{{url('/user_login')}}" method="post" class="form-horizontal">
                     <div class="form-group">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -33,21 +33,28 @@
                     <div class="form-group">
                         <input type="password" class= "form-control" placeholder="Password" name="password"/>
                     </div>
-                        <button type="submit" class="btn btn-primary py-3 px-5">Login</button>
+
+                    <p style="text-align:right;">
+                        Lupa Kata Sandi? 
+                        <a href="/reset_password">
+                            Klik Disini
+                        </a>
+                    </p>
+                        <button type="submit" style="width:100%" class="btn btn-primary py-3 px-5">Masuk</button>
                     </form>
                 </div><!--/login form-->
             </div>
             <div class="col-sm-1">
-                <h2 class="or">OR</h2>
+                <h4 class="or" style="text-align: center; margin-top: 30px;">Atau</h4>
             </div>
             <div class="col-sm-4">
                 <div class="signup-form"><!--sign up form-->
-                    <h2>New User Signup!</h2>
+                    <h4  style="text-align: center;">Belum Punya Akun?</h4>
                     <form action="{{url('/register_user')}}" method="post" class="form-horizontal">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
 
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Name" name="username" value="{{old('name')}}"/>
+                            <input type="text" class="form-control" placeholder="Name" name="name" value="{{old('name')}}"/>
                         </div>
 
                         <div class="form-group">
@@ -62,7 +69,7 @@
                             <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" value="{{old('password_confirmation')}}"/>
                         </div>
 
-                        <button type="submit" class="btn btn-primary py-3 px-5">Signup</button>
+                        <button type="submit" style="width:100%;" class="btn btn-primary py-3 px-5">Daftar</button>
                     </form>
                 </div><!--/sign up form-->
             </div>

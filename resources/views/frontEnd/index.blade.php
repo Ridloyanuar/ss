@@ -4,7 +4,7 @@
 		  <div class="home-slider owl-carousel">
 	      <div class="slider-item" style="background-image: url(frontEnd/images/bg_1.jpg);">
 	      	<div class="overlay"></div>
-	        <div class="container">
+	        <!-- <div class="container">
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-md-12 ftco-animate text-center">
@@ -13,12 +13,12 @@
 	            </div>
 
 	          </div>
-	        </div>
+	        </div> -->
 	      </div>
 
 	      <div class="slider-item" style="background-image: url(frontEnd/images/bg_2.jpg);">
 	      	<div class="overlay"></div>
-	        <div class="container">
+	        <!-- <div class="container">
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-sm-12 ftco-animate text-center">
@@ -27,12 +27,12 @@
                 </div>
                 
 	          </div>
-	        </div>
+	        </div> -->
 	      </div>
 	    </div>
     </section>
 
-    <section class="ftco-section">
+    <!-- <section class="ftco-section">
 			<div class="container">
 				<div class="row no-gutters ftco-services">
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
@@ -81,9 +81,9 @@
           </div>
         </div>
 			</div>
-		</section>
+		</section> -->
 
-		<section class="ftco-section ftco-category ftco-no-pt">
+		<!-- <section class="ftco-section ftco-category ftco-no-pt">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-8">
@@ -93,7 +93,7 @@
 									<div class="text text-center">
 										<h2>Vegetables</h2>
 										<p>Protect the health of every home</p>
-										<p><a href="/list-products" class="btn btn-primary">Shop now</a></p>
+										<p><a href="/shop" class="btn btn-primary">Shop now</a></p>
 									</div>
 								</div>
 							</div>
@@ -126,15 +126,18 @@
 					</div>
 				</div>
 			</div>
-		</section>
+		</section> -->
 
     <section class="ftco-section">
     	<div class="container">
 				<div class="row justify-content-center mb-3 pb-3">
           <div class="col-md-12 heading-section text-center ftco-animate">
-          	<span class="subheading">Featured Products</span>
-            <h2 class="mb-4">Our Products</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+            <ul class="product-category">
+              <li><a href="/?category=all" class="{{$active==0? 'active':''}}">Semua</a></li>
+              @foreach($categories as $category) 
+                  <li><a href="{{$category->url}}" class="{{$active==$category->id? 'active':''}}">{{$category->name}}</a></li>
+              @endforeach
+    				</ul>
           </div>
         </div>   		
     	</div>
@@ -142,32 +145,54 @@
     		<div class="row">
             @foreach($products as $product)
             @if($product->category->status==1)
-    			<div class="col-md-6 col-lg-3 ftco-animate">
+    			<!-- <div class="col-3 ftco-animate"> -->
     				<div class="product">
-    					<a href="{{url('/product-detail',$product->id)}}" class="img-prod"><img class="img-fluid" src="{{url('products/small/',$product->image)}}" alt="Colorlib Template">
-    						<span class="status">30%</span>
+              <a href="#" class="img-prod">
+              <img class="img-fluid" src="{{url('products/small/',$product->image)}}" alt="{{$product->p_name}}">
+
+              @if($product->promo != 0.00)   
+                <span class="status">{{$product->promo * 100}}%</span>
+              @endif
     						<div class="overlay"></div>
     					</a>
-    					<div class="text py-3 pb-4 px-3 text-center">
+    					<div class="text py-3 pb-4 px-3">
     						<h3><a href="#">{{$product->p_name}}</a></h3>
     						<div class="d-flex">
     							<div class="pricing">
-		    						<p class="price"><span class="price-sale">Rp{{$product->price}}</span></p>
+                    @if ($product->promo != 0.00)
+		    						  <p class="price"><span class="mr-2 price-dc">Rp{{$product->price}}</span><span class="price-sale">Rp{{$product->final_price}}/{{$product->jenis_satuan}}</span></p>
+                    @else
+                      <p class="price"><span class="price-sale">Rp{{$product->final_price}}/{{$product->jenis_satuan}}</span></p>
+                    @endif
 		    					</div>
 	    					</div>
-	    					<div class="bottom-area d-flex px-3">
-	    						<div class="m-auto d-flex">
-	    							<a href="{{url('/product-detail',$product->id)}}" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+	    					<!-- <div class="bottom-area d-flex px-3">
+	    						<div class="m-auto d-flex"> -->
+                    @if ($product->stock < 1) 
+	    							<span style="color: #f00b0b">HABIS</span>
+                    @else
+	    							<!-- <a href="{{url('/product-detail',$product->id)}}" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 	    								<span><i class="ion-ios-menu"></i></span>
-	    							</a>
-	    							<a href="cart" class="buy-now d-flex justify-content-center align-items-center mx-1">
-	    								<span><i class="ion-ios-cart"></i></span>
-	    							</a>
-    							</div>
-    						</div>
+                    </a> -->
+                    
+                    <form action="{{route('addToCart')}}" method="post" role="form">
+                      <input type="hidden" name="_token" value="{{csrf_token()}}">
+                      <input type="hidden" name="products_id" value="{{$product->id}}">
+                      <input type="hidden" name="product_name" value="{{$product->p_name}}">
+                      <input type="hidden" name="product_code" value="{{$product->p_code}}">
+                      <input type="hidden" name="price" value="{{$product->final_price}}" id="dynamicPriceInput">
+                      <input type="hidden" id="quantity" name="quantity" class="form-control input-number" value="1">
+                    
+                    <a href="{{url('/viewcart')}}" >
+                      <button type="submit" class="ss-product btn-primary col-md-6" style="margin-top: 10px;">BELI</button>
+                    </a>
+                    </form>
+                    @endif
+    							<!-- </div>
+    						</div> -->
     					</div>
     				</div>
-                </div>
+                <!-- </div> -->
                 @endif
 				@endforeach
     		
@@ -175,7 +200,7 @@
     	</div>
     </section>
 		
-	<section class="ftco-section img" style="background-image: url(frontEnd/images/bg_3.jpg);">
+	<!-- <section class="ftco-section img" style="background-image: url(frontEnd/images/bg_3.jpg);">
     	<div class="container">
 				<div class="row justify-content-end">
           <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
@@ -187,9 +212,9 @@
           </div>
         </div>   		
     	</div>
-    </section>
+    </section> -->
 
-    <section class="ftco-section testimony-section">
+    <!-- <section class="ftco-section testimony-section">
       <div class="container">
         <div class="row justify-content-center mb-5 pb-3">
           <div class="col-md-7 heading-section ftco-animate text-center">
@@ -275,7 +300,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <hr>
 @endsection

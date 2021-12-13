@@ -4,20 +4,72 @@ namespace App\Http\Controllers;
 
 use App\Category_model;
 use App\ImageGallery_model;
+use App\OpenOrder;
 use App\ProductAtrr_model;
 use App\Products_model;
+use App\Services\GlobalService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class IndexController extends Controller
 {
-    public function index(){
-        $products = Products_model::take(8)->get();
-        return view('frontEnd.index',compact('products'));
+    public function index(Request $request) 
+    {
+        $products = Products_model::orderBy('stock', 'desc')->get();
+        $order = GlobalService::openOrder();
+
+        $categories = Category_model::select('id', 'name', 'url')->where('status', 1)->get();
+
+        $active = 0;
+        if ($request->has('category')) {
+            $category = $request->get('category');
+            
+            if ($category == 'all') {
+                $products = $products;
+            } else {
+                $active = $category;
+                $products = $products->where('categories_id', $category);
+            }
+            
+        }
+
+        return view('frontEnd.index',[
+            "products" => $products, 
+            "categories" => $categories,
+            "active" => $active,
+            "order" => $order,
+        ]);
     }
-    public function shop(){
-        $products=Products_model::all();
-        $byCate="";
-        return view('frontEnd.shop',compact('products','byCate'));
+
+    public function shop(Request $request)
+    {
+        $order = GlobalService::openOrder();
+
+        $products = Products_model::query()->orderBy('stock', 'desc');
+        $categories = Category_model::select('id', 'name', 'url')->where('status', 1)->get();
+
+        $active = 0;
+        if ($request->has('category')) {
+            $category = $request->get('category');
+            
+            if ($category == 'all') {
+                $products = $products;
+            } else {
+                $active = $category;
+                $products = $products->where('categories_id', $category);
+            }
+            
+        }
+
+        $vegetableProducts = $products->paginate(12);
+
+        return view('frontEnd.shop', [
+                "products" => $vegetableProducts, 
+                "categories" => $categories,
+                "active" => $active,
+                "order" => $order,
+            ]
+        );
     }
 
     public function about() {
@@ -38,7 +90,9 @@ class IndexController extends Controller
         $imagesGalleries = ImageGallery_model::where('products_id', $id)->get();
         $totalStock = ProductAtrr_model::where('products_id', $id)->sum('stock');
         $relateProducts = Products_model::where([['id','!=', $id],['categories_id', $detail_product->categories_id]])->get();
-        return view('frontEnd.product_details',compact('detail_product', 'imagesGalleries', 'totalStock', 'relateProducts'));
+        $order = GlobalService::openOrder();
+
+        return view('frontEnd.product_details',compact('detail_product', 'imagesGalleries', 'totalStock', 'relateProducts', 'order'));
     }
     public function getAttrs(Request $request){
         $all_attrs=$request->all();
@@ -47,5 +101,29 @@ class IndexController extends Controller
         //echo $attr[0].' <=> '. $attr[1];
         $result_select=ProductAtrr_model::where(['products_id'=>$attr[0],'size'=>$attr[1]])->first();
         echo $result_select->price."#".$result_select->stock;
+    }
+
+    public function format(LengthAwarePaginator $paginator)
+    {
+        $paginatorData = $paginator->toArray();
+        $object = (object) [];
+
+        $object->Records = $paginatorData['data'];
+        $object->CurrentPage = (int) $paginatorData['current_page'];
+        $object->FirstPage = (int) $paginatorData['from'];
+        $object->LastPage = (int) $paginatorData['last_page'];
+        $object->PerPage = (int) $paginatorData['per_page'];
+        $object->Total = (int) $paginatorData['total'];
+
+        return $object;
+    }
+
+    public function help()
+    {
+        $order = GlobalService::openOrder();
+
+        return view('frontEnd.help', [
+            'order' => $order
+        ]);
     }
 }

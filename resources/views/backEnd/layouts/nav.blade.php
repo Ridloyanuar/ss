@@ -22,12 +22,19 @@
         </li>
         <li class="submenu {{$menu_active==5? ' active':''}}"> <a href="#"><i class="icon icon-th-list"></i> <span>Orders</span></a>
             <ul>
+                <li><a href="{{route('order.create')}}">Open Orders</a></li>
                 <li><a href="{{route('order.index')}}">List Orders</a></li>
             </ul>
         </li>
         <li class="submenu {{$menu_active==6? ' active':''}}"> <a href="#"><i class="icon icon-th-list"></i> <span>Konfirmasi Pembayaran</span></a>
             <ul>
                 <li><a href="{{route('payment.index')}}">List Pembayaran</a></li>
+            </ul>
+        </li>
+        <li class="submenu {{$menu_active==7? ' active':''}}"> <a href="#"><i class="icon icon-th-list"></i> <span>Satuan</span></a>
+            <ul>
+                <li><a href="{{route('satuan.create')}}">Add Satuan</a></li>
+                <li><a href="{{route('satuan.index')}}">List Satuan</a></li>
             </ul>
         </li>
     </ul>

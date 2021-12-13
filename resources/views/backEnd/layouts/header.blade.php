@@ -1,6 +1,6 @@
 <!--Header-part-->
 <div id="header">
-    <h1>SayurSembalun Admin</h1>
+    <img src="{{asset('img/web/sayursembalun-banner.png')}}" width="220px" style="margin-top: -15px;" />
 </div>
 <!--close-Header-part-->
 <!--top-Header-menu-->

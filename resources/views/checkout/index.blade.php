@@ -21,13 +21,13 @@
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
 			<form action="{{url('/submit-checkout')}}" method="post" class="billing-form">
-                <h3 class="mb-4 billing-heading">Shipping To</h3>
+                <h3 class="mb-4 billing-heading">Dikirim Ke</h3>
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
 
 	          	<div class="row align-items-end">
 	          		<div class="col-md-12">
 	                <div class="form-group {{$errors->has('billing_name')?'has-error':''}}">
-	                	<label for="firstname">Name</label>
+	                	<label for="firstname">Nama</label>
                       <input type="text" name="billing_name" class="form-control" value="{{$user_login->name}}" placeholder="">
                       <span class="text-danger">{{$errors->first('billing_name')}}</span>
 	                </div>
@@ -35,7 +35,7 @@
                 <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group {{$errors->has('billing_city')?'has-error':''}}">
-                            <label for="country">State</label>
+                            <label for="country">Provinsi</label>
                             <input type="text" class="form-control" name="billing_state" value="Nusa Tenggara Barat" placeholder="House number and street name">
                             <span class="text-danger">{{$errors->first('billing_state')}}</span>
 		            	</div>
@@ -43,7 +43,7 @@
 		            <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group {{$errors->has('billing_address')?'has-error':''}}">
-	                	<label for="streetaddress">Street Address</label>
+	                	<label for="streetaddress">Alamat Lengkap</label>
                       <input type="text" class="form-control" name="billing_address" value="{{$user_login->address}}" placeholder="House number and street name">
                       <span class="text-danger">{{$errors->first('billing_address')}}</span>
 	                </div>
@@ -51,7 +51,7 @@
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group {{$errors->has('billing_city')?'has-error':''}}">
-                        <label for="towncity">Town / City</label>
+                        <label for="towncity">Kota / Kabupaten</label>
                         <div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
 		                  <select name="billing_city" id="" class="form-control">
@@ -66,7 +66,7 @@
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group {{$errors->has('billing_pincode')?'has-error':''}}">
-		            		<label for="postcodezip">Postcode / ZIP *</label>
+		            		<label for="postcodezip">Kode Pos</label>
                       <input type="text" name="billing_pincode" class="form-control" value="{{$user_login->pincode}}" placeholder="">
                       <span class="text-danger">{{$errors->first('billing_pincode')}}</span>
 	                </div>
@@ -74,7 +74,7 @@
 		            <div class="w-100"></div>
 		            <div class="col-md-12">
 	                <div class="form-group {{$errors->has('billing_mobile')?'has-error':''}}">
-	                	<label for="phone">Phone</label>
+	                	<label for="phone">No Handphone</label>
                       <input type="text" name="billing_mobile" value="{{$user_login->mobile}}" class="form-control" placeholder="">
                       <span class="text-danger">{{$errors->first('billing_mobile')}}</span>
 	                </div>

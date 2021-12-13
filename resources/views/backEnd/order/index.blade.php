@@ -1,7 +1,7 @@
 @extends('backEnd.layouts.master')
 @section('title','Orders')
 @section('content')
-    <div id="breadcrumb"> <a href="{{url('/admin')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="{{route('coupon.index')}}" class="current">Coupons</a></div>
+    <div id="breadcrumb"> <a href="{{url('/admin')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="{{route('coupon.index')}}" class="current">Orders</a></div>
     <div class="container-fluid">
         @if(Session::has('message'))
             <div class="alert alert-success text-center" role="alert">
@@ -16,7 +16,8 @@
                 <table class="table table-bordered data-table">
                     <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
+                        <th>Order ID</th>
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>Biaya Pengiriman</th>
@@ -29,10 +30,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php $i=0; ?>
                     @foreach($orders as $order)
+                    <?php $i++; ?>
                         <tr class="gradeC">
-                            <td style="vertical-align: middle;">{{$order->id}}</td>
+                            <td style="vertical-align: middle;">{{$i}}</td>
+                            <td style="vertical-align: middle;">sayursmb-{{$order->id}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$order->name}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$order->address}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$order->shipping_charges}}</td>
@@ -42,7 +44,12 @@
                             <td style="text-align: center; vertical-align: middle;">{{$order->payment_method}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$order->grand_total}}</td>
                             <td style="text-align: center; vertical-align: middle;">
-                                <a href="{{route('coupon.edit',$order->id)}}" class="btn btn-primary btn-mini">Edit</a>
+                                @if ($order->order_status == 'payment_success')
+                                    <a href="invoice/{{$order->id}}" class="btn btn-info btn-mini">Invoice</a>
+                                @elseif ($order->order_status == 'pending' && $order->payment_method == 'COD')
+                                    <a href="invoice/{{$order->id}}" class="btn btn-info btn-mini">Invoice</a>
+                                @endif
+                                <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-mini">Edit</a>
                                 <a href="javascript:" rel="{{$order->id}}" rel1="delete-coupon" class="btn btn-danger btn-mini deleteRecord">Delete</a>
                             </td>
                         </tr>

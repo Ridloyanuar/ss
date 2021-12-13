@@ -19,18 +19,9 @@
                         <label class="control-label">Select Category</label>
                         <div class="controls">
                             <select name="categories_id" style="width: 415px;">
-                                @foreach($categories as $key=>$value)
-                                    <option value="{{$key}}">{{$value}}</option>
-                                    <?php
-                                        if($key!=0){
-                                            $sub_categories=DB::table('categories')->select('id','name')->where('parent_id',$key)->get();
-                                            if(count($sub_categories)>0){
-                                                foreach ($sub_categories as $sub_category){
-                                                    echo '<option value="'.$sub_category->id.'">&nbsp;&nbsp;--'.$sub_category->name.'</option>';
-                                                }
-                                            }
-                                        }
-                                    ?>
+                                <option value="0">--pilih--</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -50,13 +41,6 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="p_color" class="control-label">Color</label>
-                        <div class="controls{{$errors->has('p_color')?' has-error':''}}">
-                            <input type="text" name="p_color" id="p_color" value="{{old('p_color')}}" required="required" style="width: 400px;">
-                            <span class="text-danger">{{$errors->first('p_color')}}</span>
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label for="description" class="control-label">Description</label>
                         <div class="controls{{$errors->has('description')?' has-error':''}}">
                             <textarea class="textarea_editor span12" name="description" id="description" rows="6" placeholder="Product Description" style="width: 580px;">{{old('description')}}</textarea>
@@ -70,6 +54,44 @@
                                 <input type="number" name="price" id="price" class="" value="{{old('price')}}" title="" required="required">
                                 <span class="text-danger">{{$errors->first('price')}}</span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                    <label class="control-label">Satuan</label>
+                        <div class="controls">
+                            <select name="satuan" style="width: 415px;">
+                            <option value="">pilih</option>
+                            @foreach($satuans as $satuan)
+                                <option value="{{$satuan->id}}">{{$satuan->jenis}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="stock" class="control-label">Stock</label>
+                        <div class="controls{{$errors->has('stock')?' has-error':''}}">
+                            <input type="number" name="stock" id="stock" class="" required="required">
+                            <span class="text-danger">{{$errors->first('stock')}}</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                    <label class="control-label">Promo</label>
+                        <div class="controls">
+                            <select name="promo" style="width: 415px;">
+                            <option value="0">No Promo</option>
+                            <option value="0.01">1%</option>
+                            <option value="0.05">5%</option>
+                            <option value="0.1">10%</option>
+                            <option value="0.2">20%</option>
+                            <option value="0.3">30%</option>
+                            <option value="0.4">40%</option>
+                            <option value="0.5">50%</option>
+                            <option value="0.6">60%</option>
+                            <option value="0.7">70%</option>
+                            <option value="0.8">80%</option>
+                            <option value="0.9">90%</option>
+                            <option value="1">100%</option>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">

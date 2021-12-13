@@ -19,7 +19,7 @@
                                 <span class="text-danger" id="chCategory_name" style="color: red;">{{$errors->first('name')}}</span>
                             </div>
                         </div>
-                        <div class="control-group">
+                        <!-- <div class="control-group">
                             <label class="control-label">Category Lavel :</label>
                             <div class="controls" style="width: 245px;">
                                 <select name="parent_id" id="parent_id">
@@ -38,20 +38,20 @@
                                         @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="control-group">
                             <label class="control-label">Description :</label>
                             <div class="controls">
                                 <textarea name="description" id="description" rows="3">{{old('description')}}</textarea>
                             </div>
                         </div>
-                        <div class="control-group{{$errors->has('url')?' has-error':''}}">
+                        <!-- <div class="control-group{{$errors->has('url')?' has-error':''}}">
                             <label class="control-label">URL (Start with http://) :</label>
                             <div class="controls">
                                 <input type="text" name="url" id="url">
                                 <span class="text-danger">{{$errors->first('url')}}</span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="control-group{{$errors->has('status')?' has-error':''}}">
                             <label class="control-label">Enable :</label>
                             <div class="controls">

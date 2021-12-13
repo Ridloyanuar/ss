@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 /* FrontEnd Location */
 Route::get('/','IndexController@index');
 Route::get('/shop','IndexController@shop');
+Route::get('/help','IndexController@help');
 Route::get('/about','IndexController@about');
 Route::get('/contact','IndexController@contact');
 Route::get('/cat/{id}','IndexController@listByCat')->name('cats');
@@ -24,7 +25,9 @@ Route::get('/product-detail/{id}','IndexController@detialpro');
 Route::get('/get-product-attr','IndexController@getAttrs');
 ///// Cart Area /////////
 Route::post('/addToCart','CartController@addToCart')->name('addToCart');
-Route::get('/viewcart','CartController@index');
+Route::post('/direct-buy/{id}','CartController@directBuy');
+
+Route::get('/viewcart','CartController@index')->name('cart');
 Route::get('/cart/deleteItem/{id}','CartController@deleteItem');
 Route::get('/cart/update-quantity/{id}/{quantity}','CartController@updateQuantity');
 /////////////////////////
@@ -32,8 +35,12 @@ Route::get('/cart/update-quantity/{id}/{quantity}','CartController@updateQuantit
 Route::post('/apply-coupon','CouponController@applycoupon');
 /// Simple User Login /////
 Route::get('/login_page','UsersController@index');
+Route::get('/reset_password','UsersController@resetPassword');
+Route::get('/change-password','UsersController@changePassword');
 Route::post('/register_user','UsersController@register');
 Route::post('/user_login','UsersController@login');
+Route::post('/reset_pass','UsersController@resetSandi');
+Route::post('/change_pass','UsersController@gantiSandi');
 Route::get('/logout','UsersController@logout');
 
 ////// User Authentications ///////////
@@ -84,10 +91,13 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function (){
     /// ORDER ///
     Route::resource('/order','OrderController');
     Route::get('delete-order/{id}','OrderController@destroy');
+    Route::get('invoice/{id}','OrderController@printInvoice');
     /// PAYMENT ///
     Route::resource('/payment','PaymentController');
     Route::get('delete-payment/{id}','PaymentController@destroy');
     Route::post('confirmed/payment/{id}','PaymentController@confirmPayment')->name('confirmed');
-    
+    // SATUAN ///
+    Route::resource('/satuan','SatuanController');
+
 ///
 });

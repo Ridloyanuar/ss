@@ -45,12 +45,7 @@
                     <div class="control-group">
                         <label for="expiry_date" class="control-label">Expiry Date</label>
                         <div class="controls{{$errors->has('expiry_date')?' has-error':''}}">
-                            <div class="input-prepend">
-                                <div  data-date="12-02-2012" class="input-append date datepicker">
-                                    <input type="text" name="expiry_date" id="expiry_date" value="{{$edit_coupons->expiry_date}}"  data-date-format="yyyy-mm-dd" class="span11" style="width: 375px;" placeholder="yyyy-mm-dd">
-                                    <span class="add-on"><i class="icon-th"></i></span>
-                                </div>
-                            </div>
+                            <input type="date" name="expiry_date" id="expiry_date" value="{{$edit_coupons->expiry_date}}"  data-date-format="yyyy-mm-dd" class="form-input" style="width: 400px;" placeholder="yyyy-mm-dd">
                             <span class="text-danger">{{$errors->first('expiry_date')}}</span>
                         </div>
                     </div>
@@ -78,7 +73,6 @@
     <script src="{{asset('js/jquery.ui.custom.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="{{asset('js/bootstrap-colorpicker.js')}}"></script>
-    <script src="{{asset('js/bootstrap-datepicker.js')}}"></script>
     <script src="{{asset('js/jquery.toggle.buttons.js')}}"></script>
     <script src="{{asset('js/masked.js')}}"></script>
     <script src="{{asset('js/jquery.uniform.js')}}"></script>

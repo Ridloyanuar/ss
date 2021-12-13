@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category_model;
 use App\Products_model;
+use App\Satuan;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Illuminate\Http\Request;
@@ -17,9 +18,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $menu_active=3;
-        $i=0;
-        $products=Products_model::orderBy('created_at','desc')->get();
+        $menu_active = 3;
+        $i = 0;
+        $products = Products_model::orderBy('created_at','desc')->get();
         return view('backEnd.products.index',compact('menu_active','products','i'));
     }
 
@@ -30,9 +31,10 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        $menu_active=3;
-        $categories=Category_model::where('parent_id',0)->pluck('name','id')->all();
-        return view('backEnd.products.create',compact('menu_active','categories'));
+        $menu_active = 3;
+        $categories = Category_model::all();
+        $satuans = Satuan::all();
+        return view('backEnd.products.create',compact('menu_active','categories', 'satuans'));
     }
 
     /**
@@ -46,13 +48,15 @@ class ProductsController extends Controller
         $this->validate($request,[
             'p_name'=>'required|min:5',
             'p_code'=>'required',
-            'p_color'=>'required',
             'description'=>'required',
             'price'=>'required|numeric',
+            'satuan'=>'required|string',
+            'stock'=>'required|integer',
+            'promo'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg|max:1000',
         ]);
         $formInput=$request->all();
-        if($request->file('image')){
+        if($request->file('image')) {
             $image=$request->file('image');
             if($image->isValid()){
                 $fileName=time().'-'.str_slug($formInput['p_name'],"-").'.'.$image->getClientOriginalExtension();
@@ -66,6 +70,9 @@ class ProductsController extends Controller
                 $formInput['image']=$fileName;
             }
         }
+
+        $formInput['final_price'] = $request->price - ($request->price * $request->promo);
+
         Products_model::create($formInput);
         return redirect()->route('product.create')->with('message','Add Products Successfully!');
     }
@@ -104,20 +111,20 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update_product=Products_model::findOrFail($id);
+        $update_product = Products_model::where('id', $id)->first();
         $this->validate($request,[
             'p_name'=>'required|min:5',
             'p_code'=>'required',
-            'p_color'=>'required',
             'description'=>'required',
             'price'=>'required|numeric',
             'image'=>'image|mimes:png,jpg,jpeg|max:1000',
         ]);
-        $formInput=$request->all();
-        if($update_product['image']==''){
-            if($request->file('image')){
-                $image=$request->file('image');
-                if($image->isValid()){
+
+        $formInput = $request->all();
+        if ($update_product['image'] == '') {
+            if ($request->file('image')) {
+                $image = $request->file('image');
+                if( $image->isValid()) {
                     $fileName=time().'-'.str_slug($formInput['p_name'],"-").'.'.$image->getClientOriginalExtension();
                     $large_image_path=public_path('products/large/'.$fileName);
                     $medium_image_path=public_path('products/medium/'.$fileName);
@@ -129,9 +136,12 @@ class ProductsController extends Controller
                     $formInput['image']=$fileName;
                 }
             }
-        }else{
-            $formInput['image']=$update_product['image'];
+        } else {
+            $formInput['image'] = $update_product['image'];
         }
+
+        $formInput['final_price'] = $request->price - ($request->price * $request->promo);
+        
         $update_product->update($formInput);
         return redirect()->route('product.index')->with('message','Update Products Successfully!');
     }
