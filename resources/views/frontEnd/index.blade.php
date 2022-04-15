@@ -165,9 +165,10 @@
     						<p>{!!$product->description!!}</p>
                 <?php
                   for($i = 0; $i < 5; $i++) {
-                    echo "<span class='oi oi-star checked'></span>";
-
+                    echo "<span class='oi oi-star checked'></span> ";
                   }
+
+                  echo rand(10, 100);
                 ?>
     						<!-- <div class="d-flex"> -->
     							<div class="pricing">

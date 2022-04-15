@@ -92,7 +92,7 @@ class SatuanController extends Controller
         $satuan->jenis = $request->jenis;
         $satuan->save();
 
-        return back()->with('message', 'Add Satuan Already');  
+        return redirect()->route('satuan.index')->with('message','Update Satuan Successfully!');
     }
 
     /**
