@@ -1,8 +1,10 @@
 @extends('frontEnd.layouts.master')
 @section('content')
 <section id="home-section" class="hero">
-		  <div class="home-slider owl-carousel">
-	      <div class="slider-item" style="background-image: url(frontEnd/images/bg_1.jpg);">
+
+      @foreach($banners as $banner)
+        <div class="home-slider owl-carousel">
+	      <div class="slider-item" style="background-image: url(banner/large/{{$banner->image}});">
 	      	<div class="overlay"></div>
 	        <!-- <div class="container">
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
@@ -15,21 +17,10 @@
 	          </div>
 	        </div> -->
 	      </div>
+      @endforeach
+      
 
-	      <div class="slider-item" style="background-image: url(frontEnd/images/bg_2.jpg);">
-	      	<div class="overlay"></div>
-	        <!-- <div class="container">
-	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
-
-	            <div class="col-sm-12 ftco-animate text-center">
-	              <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
-	              <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-                </div>
-                
-	          </div>
-	        </div> -->
-	      </div>
-	    </div>
+	      
     </section>
 
     <!-- <section class="ftco-section">
@@ -128,19 +119,33 @@
 			</div>
 		</section> -->
 
-    <section class="ftco-section">
+    <!-- <section class="ftco-section"> -->
     	<div class="container">
-				<div class="row justify-content-center mb-3 pb-3">
-          <div class="col-md-12 heading-section text-center ftco-animate">
-            <ul class="product-category">
-              <li><a href="/?category=all" class="{{$active==0? 'active':''}}">Semua</a></li>
-              @foreach($categories as $category) 
-                  <li><a href="{{$category->url}}" class="{{$active==$category->id? 'active':''}}">{{$category->name}}</a></li>
-              @endforeach
-    				</ul>
+				<div class="row">
+          <div class="category-ss">
+            <div class="cat-card">
+              <div class="img-box">
+                <a href="/?category=all">
+                  <img class="cat-img" src="https://s3-ap-southeast-1.amazonaws.com/assets.segari.id/categories/v3/semua_produk.png" alt="Card image cap">
+                </a>
+              </div>
+              <p class="cat-text"><a href="#" class="active">Semua</a></p>
+            </div>
+            @foreach($categories as $category)
+            <div class="cat-card">
+              <div class="img-box">
+                <a href="{{ env('APP_ENV') != 'local' ? $category->url : $category->local_url }}">
+                  <img class="cat-img" src="{{ $category->icon != null ? asset($category->icon) : 'https://s3-ap-southeast-1.amazonaws.com/assets.segari.id/categories/v3/semua_produk.png' }}" alt="Card image cap">
+                </a>
+              </div>
+              <p class="cat-text"><a href="{{ env('APP_ENV') != 'local' ? $category->url : $category->local_url }}" class="active">{{ $category->name }}</a></p>
+            </div>
+            @endforeach
           </div>
         </div>   		
     	</div>
+
+
     	<div class="container">
     		<div class="row">
             @foreach($products as $product)
@@ -148,7 +153,7 @@
     			<!-- <div class="col-3 ftco-animate"> -->
     				<div class="product">
               <a href="#" class="img-prod">
-              <img class="img-fluid" src="{{url('products/small/',$product->image)}}" alt="{{$product->p_name}}">
+              <img class="img-fluid" src="{{url('products/small/', $product->image)}}" alt="{{$product->p_name}}">
 
               @if($product->promo != 0.00)   
                 <span class="status">{{$product->promo * 100}}%</span>
@@ -157,7 +162,14 @@
     					</a>
     					<div class="text py-3 pb-4 px-3">
     						<h3><a href="#">{{$product->p_name}}</a></h3>
-    						<div class="d-flex">
+    						<p>{!!$product->description!!}</p>
+                <?php
+                  for($i = 0; $i < 5; $i++) {
+                    echo "<span class='oi oi-star checked'></span>";
+
+                  }
+                ?>
+    						<!-- <div class="d-flex"> -->
     							<div class="pricing">
                     @if ($product->promo != 0.00)
 		    						  <p class="price"><span class="mr-2 price-dc">Rp{{$product->price}}</span><span class="price-sale">Rp{{$product->final_price}}/{{$product->jenis_satuan}}</span></p>
@@ -165,7 +177,7 @@
                       <p class="price"><span class="price-sale">Rp{{$product->final_price}}/{{$product->jenis_satuan}}</span></p>
                     @endif
 		    					</div>
-	    					</div>
+	    					<!-- </div> -->
 	    					<!-- <div class="bottom-area d-flex px-3">
 	    						<div class="m-auto d-flex"> -->
                     @if ($product->stock < 1) 
@@ -183,9 +195,9 @@
                       <input type="hidden" name="price" value="{{$product->final_price}}" id="dynamicPriceInput">
                       <input type="hidden" id="quantity" name="quantity" class="form-control input-number" value="1">
                     
-                    <a href="{{url('/viewcart')}}" >
+                    <!-- <a href="{{url('/viewcart')}}" > -->
                       <button type="submit" class="ss-product btn-primary col-md-6" style="margin-top: 10px;">BELI</button>
-                    </a>
+                    <!-- </a> -->
                     </form>
                     @endif
     							<!-- </div>

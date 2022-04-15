@@ -6,11 +6,7 @@
 		    			<div class="col-md pr-4 d-flex topper align-items-center">
 						    <!-- <span class="text">081246588816</span> -->
 					    </div>
-					    <!-- <div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">sayursembalun@gmail.com</span>
-					    </div> -->
-					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+					    <div class="col-md-5 pr-4 topper align-items-center text-lg-right">
 						    <span class="text">{{$order}}</span>
 					    </div>
 				    </div>
@@ -20,10 +16,24 @@
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="{{url('/')}}">SayurSembalun</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	      <a class="navbar-brand" href="{{url('/')}}">
+			  <img src="https://drive.google.com/thumbnail?id=1w1uXmC0H-T7benFKX3W44HRAYyuOh-Pt" alt="logo" width="48px">
+			  SayurSembalun
+			</a>
+			<div class="navbar-toggler">
+				<a href="{{url('/viewcart')}}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+						<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+					</svg>
+					@if($countCart != 0)
+					<span class="badge badge-success">{{ $countCart }}</span>
+					@endif
+				</a>
+			</div>
+			
+	      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
-	      </button>
+	      </button> -->
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">

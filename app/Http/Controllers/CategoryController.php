@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category_model;
+use App\Services\UploadService;
 use foo\bar;
 use Illuminate\Http\Request;
 
@@ -15,9 +16,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $menu_active=0;
-        $categories=Category_model::all();
-        return view('backEnd.category.index',compact('menu_active','categories'));
+        $menu_active = 0;
+        $categories = Category_model::all();
+        return view('backEnd.category.index', compact('menu_active', 'categories'));
     }
 
     /**
@@ -27,10 +28,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $menu_active=2;
-        $plucked=Category_model::where('parent_id',0)->pluck('name','id');
-        $cate_levels=['0'=>'Main Category']+$plucked->all();
-        return view('backEnd.category.create',compact('menu_active','cate_levels'));
+        $menu_active = 2;
+        $plucked = Category_model::where('parent_id',0)->pluck('name','id');
+        $cate_levels = [ '0' => 'Main Category'] + $plucked->all();
+        return view('backEnd.category.create', compact('menu_active', 'cate_levels'));
     }
 
     /**
@@ -49,17 +50,21 @@ class CategoryController extends Controller
             echo "false"; die();
         }
     }
+    
     public function store(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|max:255|unique:categories,name',
+            'icon' => 'required|mimes:png,jpg,jpeg|max:5000'
             // 'url' => 'required',
         ]);
 
         $category = new Category_model();
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->url = (env('APP_ENV') == 'production') ? env('SS_URL') : env('LOCAL_SS_URL') . '/shop?category=' . strtolower($request->name);
+        $category->url = env('SS_URL') . '/?category=' . strtolower($request->name);
+        $category->local_url = env('LOCAL_SS_URL') . '/?category=' . strtolower($request->name);
+        $category->icon = UploadService::ImageFile($request->file('icon'), 'categoryicon');
         $category->status = $request->status;
         $category->save();
 
@@ -101,16 +106,27 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update_categories=Category_model::findOrFail($id);
+        $update_categories = Category_model::findOrFail($id);
+        
         $this->validate($request,[
-            'name'=>'required|max:255|unique:categories,name,'.$update_categories->id,
-            'url'=>'required',
+            'name' => 'required|max:255|unique:categories,name,'. $update_categories->id,
+            'icon' => 'sometimes|mimes:png,jpg,jpeg|max:5000',
         ]);
-        //dd($request->all());die();
-        $input_data=$request->all();
-        if(empty($input_data['status'])){
-            $input_data['status']=0;
+
+        $input_data = $request->all();
+        if (empty($input_data['status'])) {
+            $input_data['status'] = 0;
         }
+
+        if (!empty($input_data['icon'])) {
+
+            if (file_exists($update_categories->icon)) {
+                unset($update_categories->icon);
+            }
+
+            $input_data['icon'] = UploadService::ImageFile($request->file('icon'));
+        }
+
         $update_categories->update($input_data);
         return redirect()->route('category.index')->with('message','Updated Success!');
     }

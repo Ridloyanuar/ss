@@ -22,7 +22,8 @@ class Products_model extends Model
     ];
 
     protected $appends = [
-        'jenis_satuan'
+        'jenis_satuan',
+        'categoryname'
     ];
 
     public function getjenissatuanAttribute()
@@ -37,9 +38,21 @@ class Products_model extends Model
         return $jenis_satuan->jenis;
     }
 
+    public function getcategorynameAttribute()
+    {
+        $categories_id = $this->categories_id;
+        $category = Category_model::where('id', $categories_id)->first();
+
+        if ($category == null) {
+            return null;
+        }
+
+        return strtolower($category->name);
+    }
+
     public function category() 
     {
-        return $this->belongsTo(Category_model::class,'categories_id','id');
+        return $this->belongsTo(Category_model::class, 'categories_id', 'id');
     }
 
     public function attributes() 

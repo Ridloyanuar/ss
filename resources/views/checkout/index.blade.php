@@ -55,8 +55,8 @@
                         <div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
 		                  <select name="billing_city" id="" class="form-control">
-		                    <option value="1">Lombok Timur</option>
-		                    <option value="2">Lombok Tengah</option>
+		                    <!-- <option value="1">Lombok Timur</option>
+		                    <option value="2">Lombok Tengah</option> -->
 		                    <option value="3">Lombok Barat</option>
 		                    <option value="4">Mataram</option>
                           </select>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Banner;
 use App\Category_model;
 use App\ImageGallery_model;
 use App\OpenOrder;
@@ -10,6 +11,7 @@ use App\Products_model;
 use App\Services\GlobalService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
@@ -17,18 +19,28 @@ class IndexController extends Controller
     {
         $products = Products_model::orderBy('stock', 'desc')->get();
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
-        $categories = Category_model::select('id', 'name', 'url')->where('status', 1)->get();
+        $categories = Category_model::select([
+                                'id', 
+                                'name', 
+                                'url', 
+                                'local_url', 
+                                'icon'
+                            ])->where('status', 1)->get();
 
-        $active = 0;
+        $banners = Banner::where('status', 1)->get();
+        
+        $active = 'all';
         if ($request->has('category')) {
             $category = $request->get('category');
             
             if ($category == 'all') {
+                // $active = 'all';
                 $products = $products;
             } else {
                 $active = $category;
-                $products = $products->where('categories_id', $category);
+                $products = $products->where('categoryname', $category);
             }
             
         }
@@ -38,12 +50,15 @@ class IndexController extends Controller
             "categories" => $categories,
             "active" => $active,
             "order" => $order,
+            "countCart" => $countCart,
+            "banners" => $banners
         ]);
     }
 
     public function shop(Request $request)
     {
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
         $products = Products_model::query()->orderBy('stock', 'desc');
         $categories = Category_model::select('id', 'name', 'url')->where('status', 1)->get();
@@ -68,6 +83,7 @@ class IndexController extends Controller
                 "categories" => $categories,
                 "active" => $active,
                 "order" => $order,
+                "countCart" => $countCart
             ]
         );
     }
@@ -91,8 +107,9 @@ class IndexController extends Controller
         $totalStock = ProductAtrr_model::where('products_id', $id)->sum('stock');
         $relateProducts = Products_model::where([['id','!=', $id],['categories_id', $detail_product->categories_id]])->get();
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
-        return view('frontEnd.product_details',compact('detail_product', 'imagesGalleries', 'totalStock', 'relateProducts', 'order'));
+        return view('frontEnd.product_details',compact('detail_product', 'imagesGalleries', 'totalStock', 'relateProducts', 'order', 'countCart'));
     }
     public function getAttrs(Request $request){
         $all_attrs=$request->all();
@@ -121,9 +138,12 @@ class IndexController extends Controller
     public function help()
     {
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
+
 
         return view('frontEnd.help', [
-            'order' => $order
+            'order' => $order,
+            'countCart' => $countCart
         ]);
     }
 }

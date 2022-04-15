@@ -26,40 +26,61 @@
 									{{$cart->product_name}}
 								</div>
 								<div class="product-size">
-									{{$cart->product->satuan}} {{$cart->product->jenis_satuan}}
+									{{$cart->quantity}} {{$cart->product->jenis_satuan}} x Rp {{$cart->price}}
 								</div>
 								<div class="product-price">
-									Rp {{$cart->price}}
+									Rp {{$cart->price * $cart->quantity}}
 								</div>
 							</div>
 						</div>
 						@endforeach
                         <div class="total-shopping">
+                                @if(($total_price + $shipping_address->shipping_fee) > 50000)
                                 <p>
-		    						<span>Subtotal</span>
-		    						<span>Rp{{number_format($total_price)}}</span>
+		    						<span>Biaya Pengiriman</span>
+		    						<span style="text-decoration: line-through;">Rp{{number_format($shipping_address->shipping_fee)}}</span>
+                                </p>
+                                <p>
+		    						<span>Biaya Packing</span>
+		    						<span>Rp{{number_format( $packingFee )}}</span>
 		    					</p>
-		    					<p>
+                                <p>
+		    						<span>Total Belanja</span>
+		    						<span>Rp{{number_format($total_price + $shipping_address->shipping_fee + 2000)}}</span>
+		    					</p>
+                                @else
+                                <p>
 		    						<span>Biaya Pengiriman</span>
 		    						<span>Rp{{number_format($shipping_address->shipping_fee)}}</span>
                                 </p>
+                                <p>
+		    						<span>Biaya Packing</span>
+		    						<span>Rp{{number_format( $packingFee )}}</span>
+		    					</p>
+                                <p>
+		    						<span>Total Belanja</span>
+		    						<span>Rp{{number_format($total_price + 2000)}}</span>
+		    					</p>
+                                @endif
+
                                 @if(Session::has('discount_amount_price'))
                                 <p>
 		    						<span>Diskon (Kupon)</span>
-		    						<span>Rp{{Session::get('discount_amount_price')}}</span>
+		    						<span>Rp{{number_format(Session::get('discount_amount_price'))}}</span>
 		    					</p>
 		    					<hr>
 		    					<p>
 		    						<span>Total</span>
-		    						<span>Rp{{$total_price - Session::get('discount_amount_price') + $shipping_address->shipping_fee}}</span>
+		    						<span>Rp{{number_format($total_price - Session::get('discount_amount_price') + $shipping_address->shipping_fee + $packingFee )}}</span>
 		    					</p>
                                 @else
                                 <p>
 		    						<span>Total</span>
-		    						<span>Rp{{number_format($total_price + $shipping_address->shipping_fee)}}</span>
+		    						<span>Rp{{number_format($total_price + $shipping_address->shipping_fee + $packingFee )}}</span>
 		    					</p>
                                 @endif
 						</div>
+                        <p style="font-size: 12px; text-align: right;">*pembelian diatas Rp{{number_format(50000)}}, gratis ongkir</p>
 					</div>
 
                     <br>
@@ -111,11 +132,11 @@
                         @if(Session::has('discount_amount_price'))
                             <input type="hidden" name="coupon_code" value="{{Session::get('coupon_code')}}">
                             <input type="hidden" name="coupon_amount" value="{{Session::get('discount_amount_price')}}">
-                            <input type="hidden" name="grand_total" value="{{$total_price - Session::get('discount_amount_price') + $shipping_address->shipping_fee}}">
+                            <input type="hidden" name="grand_total" value="{{$total_price - Session::get('discount_amount_price') + $shipping_address->shipping_fee + $packingFee }}">
                         @else
                             <input type="hidden" name="coupon_code" value="NO Coupon">
                             <input type="hidden" name="coupon_amount" value="0">
-                            <input type="hidden" name="grand_total" value="{{$total_price + $shipping_address->shipping_fee}}">
+                            <input type="hidden" name="grand_total" value="{{$total_price + $shipping_address->shipping_fee + $packingFee }}">
                         @endif   
 
                     <div class="cart-total">
@@ -123,7 +144,7 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="radio">
-                                        <label><input type="radio" name="payment_method" value="Bank" class="mr-2" required> Bank Tranfer</label>
+                                        <label><input type="radio" name="payment_method" value="Bank" class="mr-2" required> Bank Transfer</label>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +163,7 @@
                                         <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                                         <select name="shipping_date" id="" class="form-control">
                                             @if ($sendDate == 0)
-                                                @foreach($shipping_date as $date)
+                                                @foreach($dates as $date)
                                                     <option value="{{$date}}">{{$date}}</option>
                                                 @endforeach
                                             @else

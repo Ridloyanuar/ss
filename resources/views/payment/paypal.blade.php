@@ -64,7 +64,8 @@
                                 <li class="list-group-item">Pembayaran hanya ke rekening {{$bankInformation->type}} <b>{{$bankInformation->number}}</b> a.n {{$bankInformation->name}}.</li>
                                 <li class="list-group-item">Sesuaikan nilai transfer yang tertera disini (<b>Rp{{$who_buying->grand_total}}</b>), jangan melebih-lebihkan atau membulatkan angka nominal.</li>
                                 <li class="list-group-item">Pastikan semua data terisi dengan benar.</li>
-                                <li class="list-group-item">Selesaikan pembayaran anda sebelum pukul 15:00:00 WITA. Pesanan akan otomatis dibatalkan jika melewati batas waktu pembayaran.</li>
+								<li class="list-group-item">Jika pemesanan dilakukan setelah pukul 09:00:00 WIB. Pesanan akan dikirim besok.</li>
+                                <li class="list-group-item">Selesaikan pembayaran anda sebelum pukul 15:00:00 WIB. Pesanan akan otomatis dibatalkan jika melewati batas waktu pembayaran.</li>
                             </ul>
                         <div class="form-group">
                             <div class="col-md-12">

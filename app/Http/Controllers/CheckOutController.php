@@ -15,8 +15,9 @@ class CheckOutController extends Controller
         $countries=DB::table('countries')->get();
         $user_login=User::where('id',Auth::id())->first();
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
-        return view('checkout.index',compact('countries','user_login', 'order'));
+        return view('checkout.index',compact('countries','user_login', 'order', 'countCart'));
     }
     
     public function submitcheckout(Request $request) 

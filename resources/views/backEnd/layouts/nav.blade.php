@@ -2,6 +2,17 @@
 <div id="sidebar"><a href="{{url('/admin')}}" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
     <ul>
         <li{{$menu_active==1? ' class=active':''}}><a href="{{url('/admin')}}"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+        <li class="submenu {{$menu_active==9? ' active':''}}"> <a href="#"><i class="icon icon-th-list"></i> <span>Users</span></a>
+            <ul>
+                <li><a href="{{url('admin/users-all')}}">List Users</a></li>
+            </ul>
+        </li>
+        <li class="submenu {{$menu_active==8? ' active':''}}"> <a href="#"><i class="icon icon-th-list"></i> <span>Banner</span></a>
+            <ul>
+                <li><a href="{{route('banner.create')}}">Add New Banner</a></li>
+                <li><a href="{{route('banner.index')}}">List Banner</a></li>
+            </ul>
+        </li>
         <li class="submenu {{$menu_active==2? ' active':''}}"> <a href="#"><i class="icon icon-th-list"></i> <span>Categories</span></a>
             <ul>
                 <li><a href="{{url('/admin/category/create')}}">Add New Category</a></li>

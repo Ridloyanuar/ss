@@ -15,6 +15,7 @@ class CartController extends Controller
     public function index()
     {
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
         $session_id = Session::get('session_id');
         $cart_datas = Cart_model::with('product')->where('session_id',$session_id)->get();
@@ -24,7 +25,7 @@ class CartController extends Controller
         foreach ($cart_datas as $cart_data) {
             $total_price += $cart_data->price * $cart_data->quantity;
         }
-        return view('frontEnd.cart', compact('cart_datas', 'total_price', 'cart_count', 'order'));
+        return view('frontEnd.cart', compact('cart_datas', 'total_price', 'cart_count', 'order', 'countCart'));
     }
 
     public function addToCart(Request $request)
@@ -59,7 +60,7 @@ class CartController extends Controller
                     return redirect()->route('cart')->with('message', 'Sayur ini udah ada dikeranjang');
                 } else {
                     Cart_model::create($inputToCart);
-                    return redirect()->route('cart')->with('message', 'Sayur ditambahkan');
+                    return back()->with('message', 'Sayur ditambahkan');
                 }
 
             } else {

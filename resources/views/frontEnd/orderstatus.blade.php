@@ -7,7 +7,7 @@
         <div class="row">
         <div class="col-md-12 ftco-animate text-center">
             <h3>Kamu belum memiliki pesanan satupun.</h3>
-            <p><a href="/shop" class="btn btn-primary py-3 px-4">Buat Pesanan Sekarang</a></p>
+            <p><a href="/" class="btn btn-primary py-3 px-4">Buat Pesanan Sekarang</a></p>
         </div>
         </div>
     </div>
@@ -25,6 +25,7 @@
         <li class="list-group-item" style="margin: 20px;">
             <div class="ms-2 me-auto">
             <div class="fw-bold">Nomor Pemesanan: <b>sayursmb-{{$orderr->id}}</b></div>
+            <div class="fw-bold">Metode Pembayaran: <b>{{$orderr->payment_method}}</b></div>
             <div class="fw-bold">Total Pembelian: <b>Rp{{number_format($orderr->grand_total)}}</b></div>
             <div class="fw-bold">Tanggal Pembelian: <b>{{date('d/m/Y', strtotime($orderr->created_at))}}</b></div>
             <p>Pesanan: </p>
@@ -44,6 +45,10 @@
                 <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Selesai</div>
                 @endif
             </div>
+            @if ($orderr->payment_method == 'Bank' && $orderr->order_status != 'payment_success')
+            <br>
+            <a href="/bank?order=sayursmb-{{$orderr->id}}" class="btn btn-primary" style="width: 100%;">Konfirmasi Pembayaran</a>
+            @endif
             </div>
         </li>
         @endforeach

@@ -16,6 +16,7 @@
                 <table class="table table-bordered data-table">
                     <thead>
                     <tr>
+                        <th>Icon Category</th>
                         <th>Category Name</th>
                         <th>Created At</th>
                         <th>Status</th>
@@ -28,9 +29,10 @@
                                 $parent_cates = DB::table('categories')->select('name')->where('id',$category->parent_id)->get();
                             ?>
                             <tr class="gradeC">
+                                <td style="text-align: center;"> <img src="{{ asset($category->icon) }}" alt="icon" width="24px" height="24px"/> </td>
                                 <td>{{$category->name}}</td>
                                 <td style="text-align: center;">{{$category->created_at->diffForHumans()}}</td>
-                                <td style="text-align: center;">{{($category->status==0)?' Disabled':'Enable'}}</td>
+                                <td style="text-align: center;">{{($category->status==0) ? 'Tidak Aktif' : 'Aktif'}}</td>
                                 <td style="text-align: center;">
                                     <a href="{{route('category.edit',$category->id)}}" class="btn btn-primary btn-mini">Edit</a>
                                     <a href="javascript:" rel="{{$category->id}}" rel1="delete-category" class="btn btn-danger btn-mini deleteRecord">Delete</a>

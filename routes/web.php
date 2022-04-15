@@ -65,8 +65,10 @@ Route::group(['middleware'=>'FrontLogin_middleware'],function (){
 /* Admin Location */
 Auth::routes(['register'=>false]);
 Route::get('/home', 'HomeController@index')->name('home');
-Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function (){
+Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function () {
     Route::get('/', 'AdminController@index')->name('admin_home');
+    /// Users Area
+    Route::get('/users-all', 'AdminController@allUsers');
     /// Setting Area
     Route::get('/settings', 'AdminController@settings');
     Route::get('/check-pwd','AdminController@chkPassword');
@@ -98,6 +100,10 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function (){
     Route::post('confirmed/payment/{id}','PaymentController@confirmPayment')->name('confirmed');
     // SATUAN ///
     Route::resource('/satuan','SatuanController');
+    Route::get('delete-satuan/{id}','SatuanController@destroy');
+    //BANNER//
+    Route::resource('/banner','BannerController');
+    Route::get('delete-banner/{id}','BannerController@destroy');
 
 ///
 });

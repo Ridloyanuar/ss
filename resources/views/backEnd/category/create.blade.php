@@ -10,7 +10,7 @@
                     <h5>Add New Category</h5>
                 </div>
                 <div class="widget-content nopadding">
-                    <form class="form-horizontal" method="post" action="{{route('category.store')}}" name="basic_validate" id="basic_validate" novalidate="novalidate">
+                    <form class="form-horizontal" method="post" action="{{route('category.store')}}" enctype="multipart/form-data" name="basic_validate" id="basic_validate" novalidate="novalidate">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <div class="control-group{{$errors->has('name')?' has-error':''}}">
                             <label class="control-label">Category Name :</label>
@@ -26,14 +26,14 @@
                                         @foreach($cate_levels as $key=>$value)
                                             <option value="{{$key}}">{{$value}}</option>
                                             <?php
-                                                if($key!=0){
-                                                    $subCategory=DB::table('categories')->select('id','name')->where('parent_id',$key)->get();
-                                                    if(count($subCategory)>0){
-                                                        foreach ($subCategory as $subCate){
-                                                            echo '<option value="'.$subCate->id.'">&nbsp;&nbsp;--'.$subCate->name.'</option>';
-                                                        }
-                                                    }
-                                                }
+                                                // if($key!=0){
+                                                //     $subCategory=DB::table('categories')->select('id','name')->where('parent_id',$key)->get();
+                                                //     if(count($subCategory)>0){
+                                                //         foreach ($subCategory as $subCate){
+                                                //             echo '<option value="'.$subCate->id.'">&nbsp;&nbsp;--'.$subCate->name.'</option>';
+                                                //         }
+                                                //     }
+                                                // }
                                             ?>
                                         @endforeach
                                 </select>
@@ -52,6 +52,13 @@
                                 <span class="text-danger">{{$errors->first('url')}}</span>
                             </div>
                         </div> -->
+                        <div class="control-group{{$errors->has('icon')?' has-error':''}}">
+                            <label class="control-label">Icon Category :</label>
+                            <div class="controls">
+                                <input type="file" name="icon" id="icon">
+                                <span class="text-danger">{{$errors->first('icon')}}</span>
+                            </div>
+                        </div>
                         <div class="control-group{{$errors->has('status')?' has-error':''}}">
                             <label class="control-label">Enable :</label>
                             <div class="controls">
@@ -80,8 +87,8 @@
     <script src="{{ asset('js/select2.min.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/jquery.validate.js') }}"></script>
-    <script src="{{ asset('js/matrix.js') }}"></script>
-    <script src="{{ asset('js/matrix.form_validation.js') }}"></script>
+    <!-- <script src="{{ asset('js/matrix.js') }}"></script>
+    <script src="{{ asset('js/matrix.form_validation.js') }}"></script> -->
     <script src="{{ asset('js/matrix.tables.js') }}"></script>
     <script src="{{ asset('js/matrix.popover.js') }}"></script>
 @endsection

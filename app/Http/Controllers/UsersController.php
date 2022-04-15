@@ -21,7 +21,9 @@ class UsersController extends Controller
     public function index()
     {
         $order = GlobalService::openOrder();
-        return view('users.login_register', compact('order'));
+        $countCart = GlobalService::countCart();
+
+        return view('users.login_register', compact('order', 'countCart'));
     }
 
     public function register(Request $request)
@@ -70,8 +72,9 @@ class UsersController extends Controller
         $countries=DB::table('countries')->get();
         $user_login=User::where('id',Auth::id())->first();
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
-        return view('users.account',compact('countries','user_login', 'order'));
+        return view('users.account',compact('countries','user_login', 'order', 'countCart'));
     }
     public function updateprofile(Request $request,$id){
         $this->validate($request,[
@@ -109,7 +112,9 @@ class UsersController extends Controller
     public function resetPassword()
     {
         $order = GlobalService::openOrder();
-        return view('users.resetpassword', compact('order'));
+        $countCart = GlobalService::countCart();
+
+        return view('users.resetpassword', compact('order', 'countCart'));
     }
 
     public function resetSandi(Request $request)
@@ -144,7 +149,9 @@ class UsersController extends Controller
     public function changePassword()
     {
         $order = GlobalService::openOrder();
-        return view('users.change_password', compact('order'));
+        $countCart = GlobalService::countCart();
+
+        return view('users.change_password', compact('order', 'countCart'));
     }
 
     public function gantiSandi(Request $request) 

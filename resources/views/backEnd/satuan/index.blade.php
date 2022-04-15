@@ -28,8 +28,8 @@
                             <td style="vertical-align: middle;">{{$i}}</td>
                             <td style="text-align: center; vertical-align: middle;">{{$satuan->jenis}}</td>
                             <td style="text-align: center; vertical-align: middle;">
-                                <a href="{{route('payment.edit',$satuan->id)}}" class="btn btn-primary btn-mini">Edit</a>
-                                <a href="javascript:" rel="{{$satuan->id}}" rel1="delete-coupon" class="btn btn-danger btn-mini deleteRecord">Delete</a>
+                                <a href="{{route('satuan.edit',$satuan->id)}}" class="btn btn-primary btn-mini">Edit</a>
+                                <a href="javascript:" rel="{{$satuan->id}}" rel1="delete-satuan" class="btn btn-danger btn-mini deleteRecord">Delete</a>
                             </td>
                         </tr>
                     @endforeach

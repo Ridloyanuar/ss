@@ -65,7 +65,14 @@ class SatuanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $menu_active = 7;
+
+        $satuan = Satuan::where('id', $id)->first();
+
+        return view('backEnd.satuan.edit', [
+            'satuan' => $satuan,
+            'menu_active' => $menu_active
+        ]);
     }
 
     /**
@@ -77,7 +84,15 @@ class SatuanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'jenis' => 'sometimes|required|string|unique:satuan,jenis',
+        ]);
+
+        $satuan = Satuan::where('id', $id)->first();
+        $satuan->jenis = $request->jenis;
+        $satuan->save();
+
+        return back()->with('message', 'Add Satuan Already');  
     }
 
     /**
@@ -88,6 +103,10 @@ class SatuanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $satuan = Satuan::where('id', $id)->first();
+
+        $satuan->delete();
+
+        return redirect()->back();
     }
 }

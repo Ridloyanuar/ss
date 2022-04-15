@@ -15,6 +15,9 @@ use App\Services\GlobalService;
 use App\Services\TelegramService;
 use App\User;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,11 +28,26 @@ class OrdersController extends Controller
 {
     public function index() 
     {
+        Carbon::setLocale('id');
+
         $session_id = Session::get('session_id');
         $cart_datas = Cart_model::with('product')->where('session_id', $session_id)->get();
+        $shipping_address = DB::table('delivery_address')
+                                ->join('shipping_charges', 'delivery_address.city', '=', 'shipping_charges.id')
+                                ->where('users_id', Auth::id())
+                                ->first();
+
+        $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
+
+        $packingFee = 2000;
         $total_price = 0;
         foreach ($cart_datas as $cart_data) {
             $total_price += $cart_data->price * $cart_data->quantity;
+        }
+
+        if ($total_price > 50000) {
+            $total_price = $total_price - $shipping_address->shipping_fee;
         }
 
         $blockedDatesInput = "08 Mar 2010,12 Apr 2010"; // dont show these dates
@@ -40,7 +58,7 @@ class OrdersController extends Controller
         $monday = [];
         $thursday = [];
 
-        for($i=1; $i<=5; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $monday [] =  date("l d M Y", strtotime('+'.$i.' Monday'));          
             $thursday [] = date("l d M Y", strtotime('+'.$i.' Friday'));
         }
@@ -49,12 +67,19 @@ class OrdersController extends Controller
 
         usort($shipping_date, array($this,'date_sort'));
 
-        $shipping_address = DB::table('delivery_address')
-                                ->join('shipping_charges', 'delivery_address.city', '=', 'shipping_charges.id')
-                                ->where('users_id', Auth::id())
-                                ->first();
+        $nowDays = Carbon::now()->format("Y-m-d");
+        $futureDays = Carbon::now()->addDays(7)->format("Y-m-d");
 
-        $order = GlobalService::openOrder();
+        $period = new DatePeriod(
+            new DateTime($nowDays),
+            new DateInterval('P1D'),
+            new DateTime($futureDays)
+        );
+
+        $dates = [];
+        foreach ($period as $key => $value) {
+            $dates[] = Carbon::createFromFormat('Y-m-d', $value->format('Y-m-d'))->formatLocalized("%A, %d %B %Y");
+        }
 
         $sendDate = 0;
         $openOrder = OpenOrder::query()->orderBy('tanggal', 'desc')->first();
@@ -72,16 +97,22 @@ class OrdersController extends Controller
             'total_price', 
             'shipping_date',
             'order',
+            'countCart',
             'sendDate',
-            'tanggal'
+            'tanggal',
+            'dates', 
+            'packingFee'
         ));
     }
 
     public function order(Request $request) 
     {
-        return $request->all();
         $session_id = Session::get('session_id');
         $carts = Cart_model::where('session_id', $session_id)->get();
+
+        if (empty($carts[0])) {
+            return redirect('/order/status');
+        }
 
         $input_data = $request->all();
         $payment_method = $input_data['payment_method'];
@@ -99,10 +130,23 @@ class OrdersController extends Controller
         }
 
         $shippingDate = strftime("%d %B %Y", strtotime($request->shipping_date));
-        
-        $telegramMessage = "Pesanan Baru! dari $request->name \n\nSayur yang dibeli:\n$dataMessage \nNomor Order: sayursmb-$order->id \nTanggal Pengiriman: $shippingDate \nAlamat Pengiriman: $request->address, $request->city, $request->state \nNo Handphone: $request->mobile \nMetode Pembayaran: $request->payment_method \nOngkir: Rp$request->shipping_charges \nTotal Pembayaran: Rp$request->grand_total";
+        $whatsappCustomer = "https://wa.me/" . "62" . ltrim($request->mobile, 0);
 
-        (new TelegramService(env('TELEGRAM_BOT_TOKEN'), env('TELEGRAM_CHAT_ID')))->send($telegramMessage);
+        $adminNotification = "Pesanan Baru! dari $request->name \n\nSayur yang dibeli:\n$dataMessage \nNomor Order: sayursmb-$order->id \nTanggal Pengiriman: $request->shipping_date \nAlamat Pengiriman: $request->address, $request->city, $request->state \nNo Handphone: $request->mobile \nMetode Pembayaran: $request->payment_method \nOngkir: Rp$request->shipping_charges \nBiaya Packing: Rp2000 \nTotal Pembayaran: Rp$request->grand_total";
+        $adminNotificationToSendToUser = "
+        (Kirim Pesan Ini ke Pelanggan)
+        \nWhatsapp Pelanggan $whatsappCustomer 
+        \nHalo kak $request->name,
+        \nTerimakasih telah mempercayakan kebutuhan sayurmu di SayurSembalun yaa
+        \nBerikut untuk detail pesanannya:
+        \n$dataMessage \nNomor Order: sayursmb-$order->id \nTanggal Pengiriman: $request->shipping_date \nAlamat Pengiriman: $request->address, $request->city, $request->state \nMetode Pembayaran: $request->payment_method \nOngkir: Rp$request->shipping_charges \nBiaya Packing: Rp2000 \nTotal Pembayaran: Rp$request->grand_total
+        \n --------------------------
+        \nSayur yang dipesan lebih dari pukul 10:00 WIT akan dikirimkan esok harinya.
+        \nJika memilih pembayaran bank pastikan membayar sebelum pukul 15:00 WIT
+        \nPesanan akan kami proses mohon tunggu didepan rumah yaa Sobat Sayur";
+
+        (new TelegramService(env('TELEGRAM_BOT_TOKEN'), env('TELEGRAM_CHAT_ID')))->send($adminNotification);
+        (new TelegramService(env('TELEGRAM_BOT_TOKEN'), env('TELEGRAM_CHAT_ID')))->send($adminNotificationToSendToUser);
 
         //send email order
         $pelanggan = User::where('id', Auth::user()->id)->first();
@@ -149,8 +193,9 @@ class OrdersController extends Controller
     {
         $user_order = Orders_model::where('users_id', Auth::id())->first();
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
-        return view('payment.cod',compact('user_order', 'order'));
+        return view('payment.cod',compact('user_order', 'order', 'countCart'));
     }
 
     public function paypal(Request $request)
@@ -169,9 +214,11 @@ class OrdersController extends Controller
         
                                     
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
+
         $bankInformation = BankInformation::first();
         
-        return view('payment.paypal',compact('who_buying', 'order', 'bankInformation'));
+        return view('payment.paypal',compact('who_buying', 'order', 'bankInformation', 'countCart'));
     }
 
     public function paymentConfirmation(Request $request) 
@@ -215,8 +262,9 @@ class OrdersController extends Controller
                     
         $total_order = $orders->count();
         $order = GlobalService::openOrder();
+        $countCart = GlobalService::countCart();
 
-        return view('frontEnd.orderstatus', compact('orders', 'total_order', 'order'));
+        return view('frontEnd.orderstatus', compact('orders', 'total_order', 'order', 'countCart'));
     }
 
     public function date_sort($a, $b) {

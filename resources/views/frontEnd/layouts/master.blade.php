@@ -4,7 +4,7 @@
     <title>Sayur Sembalun</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <meta name="google-site-verification" content="eZryb-M3UD68Tgz1uRPkpRBS1V3NwHwVnqsMp0Qz5wY" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
@@ -22,10 +22,20 @@
     <link rel="stylesheet" href="{{asset('frontEnd/css/icomon.css')}}">
     <link rel="stylesheet" href="{{asset('frontEnd/css/style.css')}}">
     <link rel="icon" href="https://drive.google.com/thumbnail?id=1w1uXmC0H-T7benFKX3W44HRAYyuOh-Pt">
-    
+    <script>
+
+      let details = navigator.userAgent;
+
+      let regexp = /android|iphone|kindle|ipad/i;
+      let isMobileDevice = regexp.test(details);
+
+      if (!isMobileDevice) {
+          alert('Saat ini website SayurSembalun versi Desktop/Laptop sedang dalam perbaikan. untuk pengalaman lebih baik dalam mengakses website SayurSembalun silahkan mengakses dengan menggunakan Smartphone anda.')
+      } 
+    </script>
+
   </head>
   <body class="goto-here">
-  
     @include('frontEnd.layouts.header')
     @yield('content')
     <!-- @include('frontEnd.layouts.footer') -->
