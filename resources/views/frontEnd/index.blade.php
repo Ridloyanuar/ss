@@ -197,7 +197,13 @@
                       <input type="hidden" id="quantity" name="quantity" class="form-control input-number" value="1">
                     
                     <!-- <a href="{{url('/viewcart')}}" > -->
-                      <button type="submit" class="ss-product btn-primary col-md-6" style="margin-top: 10px;">BELI</button>
+                      <div class="btn col-md-12">
+                        <button type="button" class="minusBtn">-</button>
+                        <button type="button" class="ss-product btn-primary col-md-6" style="margin-top: 10px;">BELI</button>
+                        <button type="button" class="plusBtn">+</button>
+                      </div>
+                      
+                      
                     <!-- </a> -->
                     </form>
                     @endif

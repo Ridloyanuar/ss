@@ -22,6 +22,11 @@
     <link rel="stylesheet" href="{{asset('frontEnd/css/icomon.css')}}">
     <link rel="stylesheet" href="{{asset('frontEnd/css/style.css')}}">
     <link rel="icon" href="https://drive.google.com/thumbnail?id=1w1uXmC0H-T7benFKX3W44HRAYyuOh-Pt">
+    <style>
+      .minusBtn,.plusBtn{
+        display: none;
+      }
+    </style>
     <script>
 
       let details = navigator.userAgent;
@@ -57,6 +62,38 @@
   <script src="{{asset('frontEnd/js/scrollax.min.js')}}"></script>
   <script src="{{asset('frontEnd/js/google-map.js')}}"></script>
   <script src="{{asset('frontEnd/js/main.js')}}"></script>
+  <script>
+    let btn = document.querySelector('.ss-product');
+    let mbtn = document.querySelector('.minusBtn');
+    let pbtn = document.querySelector('.plusBtn');
+
     
+      btn.addEventListener("click",()=>{
+        if (btn.innerText == 'BELI') {    
+          btn.innerText = 1;
+          pbtn.style.display = 'inline-block';
+          mbtn.style.display = 'inline-block';
+        }
+      })
+    
+   
+
+    mbtn.addEventListener("click",()=>{
+      if (btn.innerText < 2) {
+        btn.innerText = 'BELI'  
+        pbtn.style.display = 'none';
+        mbtn.style.display = 'none';
+      }else{
+        btn.innerText = btn.innerText - 1;
+      }
+    })
+
+    pbtn.addEventListener("click",()=>{
+      btn.innerText = +(btn.innerText) + +1;
+    })
+
+
+  </script>
+
   </body>
 </html>
