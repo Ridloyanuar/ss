@@ -198,9 +198,9 @@
                     
                     <!-- <a href="{{url('/viewcart')}}" > -->
                       <div class="btn col-md-12">
-                        <button type="button" class="minusBtn">-</button>
-                        <button type="button" class="ss-product btn-primary col-md-6" style="margin-top: 10px;">BELI</button>
-                        <button type="button" class="plusBtn">+</button>
+                        <button type="button" class="minusBtn" id="minus-btn-{{$product->id}}" onclick="minProduct('{{$product->id}}')">-</button>
+                        <button type="button" class="ss-product btn-primary col-md-6" style="margin-top: 10px;" id="buy-btn-{{$product->id}}" onclick="buyProduct('{{$product->id}}')">BELI</button>
+                        <button type="button" class="plusBtn" id="plus-btn-{{$product->id}}" onclick="plusProduct('{{$product->id}}')">+</button>
                       </div>
                       
                       

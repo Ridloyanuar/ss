@@ -34,9 +34,9 @@
       let regexp = /android|iphone|kindle|ipad/i;
       let isMobileDevice = regexp.test(details);
 
-      if (!isMobileDevice) {
-          alert('Saat ini website SayurSembalun versi Desktop/Laptop sedang dalam perbaikan. untuk pengalaman lebih baik dalam mengakses website SayurSembalun silahkan mengakses dengan menggunakan Smartphone anda.')
-      } 
+      // if (!isMobileDevice) {
+      //     alert('Saat ini website SayurSembalun versi Desktop/Laptop sedang dalam perbaikan. untuk pengalaman lebih baik dalam mengakses website SayurSembalun silahkan mengakses dengan menggunakan Smartphone anda.')
+      // } 
     </script>
 
   </head>
@@ -67,31 +67,40 @@
     let mbtn = document.querySelector('.minusBtn');
     let pbtn = document.querySelector('.plusBtn');
 
-    
-      btn.addEventListener("click",()=>{
-        if (btn.innerText == 'BELI') {    
-          btn.innerText = 1;
-          pbtn.style.display = 'inline-block';
-          mbtn.style.display = 'inline-block';
-        }
-      })
-    
-   
+    function minProduct(id) {
+      let buy = document.getElementById('buy-btn-' + id);
+      let min = document.getElementById('minus-btn-' + id);
+      let plus = document.getElementById('plus-btn-' + id);
 
-    mbtn.addEventListener("click",()=>{
-      if (btn.innerText < 2) {
-        btn.innerText = 'BELI'  
-        pbtn.style.display = 'none';
-        mbtn.style.display = 'none';
-      }else{
-        btn.innerText = btn.innerText - 1;
+      if (buy.innerText < 2) {
+        buy.innerText = 'BELI'  
+        min.style.display = 'none';
+        plus.style.display = 'none';
+      } else {
+        buy.innerText = buy.innerText - 1;
       }
-    })
+    }
 
-    pbtn.addEventListener("click",()=>{
-      btn.innerText = +(btn.innerText) + +1;
-    })
+    function buyProduct(id) {
+      let buy = document.getElementById('buy-btn-' + id);
+      let min = document.getElementById('minus-btn-' + id);
+      let plus = document.getElementById('plus-btn-' + id);
 
+      if (buy.innerText == 'BELI') {
+        buy.innerText = 1
+        min.style.display = 'inline-block';
+        plus.style.display = 'inline-block';
+      }
+    }
+
+    function plusProduct(id) {
+      let buy = document.getElementById('buy-btn-' + id);
+      let min = document.getElementById('minus-btn-' + id);
+      let plus = document.getElementById('plus-btn-' + id);
+
+      buy.innerText = +(buy.innerText) + +1;
+
+    }
 
   </script>
 
